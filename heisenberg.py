@@ -6,6 +6,7 @@ import playsound
 import speech_recognition as sr
 import random
 import getpass
+import pyjokes
 
 def speak(text):
     language = 'en'
@@ -207,10 +208,24 @@ def start():
         getaudio()
         if("open" in command):
             open_something()
- #       elif("where am i" or "can you spot my location")
-            
+        elif(("where am i" or "can you spot my location" or "find me") in command):
+            driver = webdriver.chrome()
+            driver.get("https://earth.google.com/web/")
+            location = driver.find_element_by_id("icon")
+            location.click()
+        elif("i am bored" or "bored" in command):
+            speak("Do you want to play a boring game?")
+            if(("yes" or "yup" or "yeah" or "yup" in command):
+                driver = webdriver.chrome()
+                driver.get("https://www.boredbutton.com/")
+            else:
+                driver = webdriver.chrome()
+                driver.get("https://lifehacks.io/what-to-do-when-your-bored/")
+
         elif("play" in command):
             play()
+        elif(("joke" or "tell me a joke") in command):
+            speak(pyjokes.get_joke())
         elif("send" in command):
             send()
         elif("hey" in command):
