@@ -16,8 +16,9 @@ def speak(text):
     os.system("rm speak.mp3")
 
 command =""
-
+text = ""
 def getaudio():
+    global text
     global command
     r = sr.Recognizer()	
     print("speak")	
@@ -28,7 +29,7 @@ def getaudio():
     try:
         print("                                                                                                                                                                                   " + r.recognize_google(audio))
 	text = r.recognize_google(audio)
-    command = r.recognize_google(audio).lower()
+        command = r.recognize_google(audio).lower()
 
     except sr.UnknownValueError:
         speak(k)
@@ -139,10 +140,11 @@ def send():
         elif("whatsapp" or "watsapp" in command):
             driver = webdriver.Chrome()
             driver.get("https://web.whatsapp.com/")
-   elif("mail" in command):
-       driver = webdriver.Chrome()
-       driver.get('https://accounts.google.com/')
-       username = driver.find_element_by_name("identifier")
+    elif("mail" in command):
+        global text
+        driver = webdriver.Chrome()
+        driver.get('https://accounts.google.com/')
+        username = driver.find_element_by_name("identifier")
         speak("Please enter your username")
         username.send_keys(raw_input("Username: "))
         username.send_keys(Keys.RETURN)
