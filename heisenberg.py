@@ -22,8 +22,9 @@ def getaudio():
     global text
     global command
     r = sr.Recognizer()	
-    print("speak")	
     with sr.Microphone() as source:
+        audio = r.adjust_for_ambient_noise(source)
+        print("speak")
         audio = r.listen(source)
     list = ["Excuse me?","Sorry,I couldn't get you","Can you repeat what you just said","pardon"]
     k = random.choice(list)
@@ -69,14 +70,6 @@ def open_something():
     elif("gmail" in command):
         driver = webdriver.Chrome()
 	driver.get("https://accounts.google.com/")
-        username = driver.find_element_by_name("identifier")
-        speak("Please enter your username")
-        username.send_keys(raw_input("Username: "))
-        username.send_keys(Keys.RETURN)
-        speak("Please enter your password")
-        password = driver.find_element_by_name("password")
-        password.send_keys(getpass.getpass())
-        password.send_keys(Keys.RETURN)
     
     elif("lms" in command):
         driver = webdriver.Chrome()
@@ -108,23 +101,21 @@ def play():
 	if("spotify" in command):
 	    os.system("spotify")
 	elif("youtube" in command):
-	    speak("What song do you want me to play?")
+	    speak("What song/music do you want me to play?")
             getaudio()
+            driver = webdriver.Chrome()
             driver.get("https://youtube.com/")
             search = driver.find_element_by_id("search")
-            search.sendkeys(command)
+            search.send_keys(command)
             search.send_keys(Keys.RETURN)
-            link = driver.find_element_by_tag_name("a")
-            link.get(1).click()
     if("video" in command):
        	speak("What song do you want me to play?")
         getaudio()
+        driver = webdriver.Chrome()
         driver.get("https://youtube.com/")
         search = driver.find_element_by_id("search")
         search.sendkeys(command)
         search.send_keys(Keys.RETURN)
-        link = driver.find_element_by_tag_name("a")
-        link.get(1).click()
 
 def send():
     global command
@@ -143,39 +134,6 @@ def send():
         elif("whatsapp" or "watsapp" in command):
             driver = webdriver.Chrome()
             driver.get("https://web.whatsapp.com/")
-    elif("mail" in command):
-        global text
-        driver = webdriver.Chrome()
-        driver.get('https://accounts.google.com/')
-        username = driver.find_element_by_name("identifier")
-        speak("Please enter your username")
-        username.send_keys(raw_input("Username: "))
-        username.send_keys(Keys.RETURN)
-        speak("Please enter your password")
-        password = driver.find_element_by_id("password")
-        password.send_keys(getpass.getpass())
-        password.send_keys(Keys.RETURN)
-        compose = driver.find_element_by_Xpath('//*[@id=:ku]/div/div')
-        compose.click()
-        recipient = driver.find_element_by_id(':qj')
-        speak('Please enter the mail of the recipient')
-        getaudio()
-        recipient.send_keys(command)
-        subject = driver.find_element_by_id(':ql')
-        speak('What is the subject for the mail?')
-        getaudio()
-        subject.send_keys(text)
-        speak('Do you want to enter the mesage yourself?')
-        getaudio()
-        if(("yes" or "yup" or "yeah" or "ya") in command):
-            message = driver.find_element_by_id(':r6')
-            speak('Please enter the message')
-            message.send_keys(raw_input(("Please type '\n' for a new line")))
-        else:
-            message = driver.find_element_by_id(':r6')
-            speak("Please tell your message")
-            getaudio()
-            message.send_keys(text)
 
 def find():
     global command
@@ -203,32 +161,37 @@ k = 0
 def start():
     global driver
     global k
+    global command
     speak("Hello, I am Heisenberg, what can I do for you?")
     while(k == 0):
         getaudio()
         if("open" in command):
             open_something()
         elif(("where am i" or "can you spot my location" or "find me") in command):
-            driver = webdriver.chrome()
+            driver = webdriver.Chrome()
             driver.get("https://earth.google.com/web/")
-            location = driver.find_element_by_id("icon")
-            location.click()
-        elif("i am bored" or "bored" in command):
+        elif(("i am bored" or "bored") in command):
             speak("Do you want to play a boring game?")
-            if(("yes" or "yup" or "yeah" or "yup" in command):
-                driver = webdriver.chrome()
+            getaudio()
+            if(("yes" or "yup" or "yeah" or "yup") in command):
+                driver = webdriver.Chrome()
                 driver.get("https://www.boredbutton.com/")
             else:
-                driver = webdriver.chrome()
+                driver = webdriver.Chrome()
                 driver.get("https://lifehacks.io/what-to-do-when-your-bored/")
-
+        elif(("what song is this" or "identify this song" or "identify the song") in command):
+            driver = webdriver.Chrome()
+            driver.get("https://www.acrcloud.com/identify-songs-music-recognition-online/#record-div")
+            button = driver.find_element_by_id("record")
+            button.click()
+            os.system("sleep 17")
         elif("play" in command):
             play()
         elif(("joke" or "tell me a joke") in command):
             speak(pyjokes.get_joke())
         elif("send" in command):
             send()
-        elif("hey" in command):
+        elif(("hey" or "hi") in command):
             speak("Hey,what can I do for you?")
         elif("how are you" in command):
             speak("I'm fine")
