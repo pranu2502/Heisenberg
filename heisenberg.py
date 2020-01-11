@@ -169,7 +169,8 @@ def start():
             open_something()
         elif(("where am i" or "can you spot my location" or "find me") in command):
             driver = webdriver.Chrome()
-            driver.get("https://earth.google.com/web/")
+            driver.get("https://www.google.com/maps/")
+
         elif(("i am bored" or "bored") in command):
             speak("Do you want to play a boring game?")
             getaudio()
