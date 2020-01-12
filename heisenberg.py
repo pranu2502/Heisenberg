@@ -109,7 +109,7 @@ def play():
             search.send_keys(command)
             search.send_keys(Keys.RETURN)
     if("video" in command):
-       	speak("What song do you want me to play?")
+       	speak("What video do you want me to play?")
         getaudio()
         driver = webdriver.Chrome()
         driver.get("https://youtube.com/")
@@ -185,7 +185,6 @@ def start():
             driver.get("https://www.acrcloud.com/identify-songs-music-recognition-online/#record-div")
             button = driver.find_element_by_id("record")
             button.click()
-            os.system("sleep 17")
         elif("play" in command):
             play()
         elif(("joke" or "tell me a joke") in command):
