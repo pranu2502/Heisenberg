@@ -7,6 +7,9 @@ import speech_recognition as sr
 import random
 import getpass
 import pyjokes
+import smtplib
+from email.mime.text import MIMEText
+from email.mime.multipart import MIMEMultipart
 
 def speak(text):
     language = 'en'
@@ -70,7 +73,7 @@ def open_something():
     elif("gmail" in command):
         driver = webdriver.Chrome()
 	driver.get("https://accounts.google.com/")
-    
+
     elif("lms" in command):
         driver = webdriver.Chrome()
         driver.get("https://lms.iiitb.ac.in/moodle/login/index.php")
@@ -134,6 +137,28 @@ def send():
         elif("whatsapp" or "watsapp" in command):
             driver = webdriver.Chrome()
             driver.get("https://web.whatsapp.com/")
+    elif("mail" in command):
+        speak("Please enter your username")
+        sender = raw_input("username ")
+        speak("Please enter your password")
+        password = getpass.getpass()
+        speak("Please enter the recipent's email address")
+        reciever = raw_input("email: ")
+        speak("What is your subject")
+        subject = raw_input("subject: ")
+        speak("Please enter the message")
+        message = raw_input("Message: ")
+        msg = MIMEMultipart()
+        msg['From'] = sender
+        msg['To'] = reciever
+        msg['Subject'] = subject
+        msg.attach(MIMEText(message, 'plain'))
+        server = smtplib.SMTP('smtp.gmail.com', 587)
+        server.starttls()
+        server.login(sender, password)
+        text = msg.as_string() 
+        server.sendmail(sender, reciever, text)
+        server.quit()
 
 def find():
     global command
